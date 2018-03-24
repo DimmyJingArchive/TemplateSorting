@@ -148,7 +148,7 @@ struct Sort <Null>
 
 int main()
 {
-	// format the list with
+	// format the list with:
 	// perl -pe '1 while s/^(.*?)(?<!<)(?<![0-9])([0-9]+)(.*?)$/$1List<Int<$2>, $3> /g;s/(List<Int<[0-9]+>),( >)/$1$2/g'
 	// The numbers must be on the same line and seperated by whitespaces
 	auto begin = std::chrono::high_resolution_clock::now();
