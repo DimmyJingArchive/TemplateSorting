@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>
 
 template <int N>
 struct Int
@@ -150,18 +151,30 @@ int main()
 	// format the list with
 	// perl -pe '1 while s/^(.*?)(?<!<)(?<![0-9])([0-9]+)(.*?)$/$1List<Int<$2>, $3> /g;s/(List<Int<[0-9]+>),( >)/$1$2/g'
 	// The numbers must be on the same line and seperated by whitespaces
+	auto begin = std::chrono::high_resolution_clock::now();
 	typedef List<Int<35>,  List<Int<98>,  List<Int<33>,  List<Int<27>,  List<Int<46>,  List<Int<77>,  List<Int<54>,  List<Int<92>,  List<Int<35>,  List<Int<32> > > > > > > > > > > originalList;
 	typedef Sort<originalList>::result newList;
+	auto end = std::chrono::high_resolution_clock::now();
 	std::cout << "Original: ";
 	std::cout << ElemAt<originalList, 0>::result::result << ' ' << ElemAt<originalList, 1>::result::result << ' '
 			  << ElemAt<originalList, 2>::result::result << ' ' << ElemAt<originalList, 3>::result::result << ' '
 			  << ElemAt<originalList, 4>::result::result << ' ' << ElemAt<originalList, 5>::result::result << ' '
 			  << ElemAt<originalList, 6>::result::result << ' ' << ElemAt<originalList, 7>::result::result << ' '
 			  << ElemAt<originalList, 8>::result::result << ' ' << ElemAt<originalList, 9>::result::result << std::endl;
-	std::cout << "Sorted:   ";
+	std::cout << "Template sorting: ";
 	std::cout << ElemAt<newList, 0>::result::result << ' ' << ElemAt<newList, 1>::result::result << ' '
 			  << ElemAt<newList, 2>::result::result << ' ' << ElemAt<newList, 3>::result::result << ' '
 			  << ElemAt<newList, 4>::result::result << ' ' << ElemAt<newList, 5>::result::result << ' '
 			  << ElemAt<newList, 6>::result::result << ' ' << ElemAt<newList, 7>::result::result << ' '
 			  << ElemAt<newList, 8>::result::result << ' ' << ElemAt<newList, 9>::result::result << std::endl;
+	std::cout << std::chrono::duration_cast<std::chrono::duration<float, std::chrono::milliseconds::period> >(end - begin).count() << "ms" << std::endl;
+	begin = std::chrono::high_resolution_clock::now();
+	int nums[10] = {35, 98, 33, 27, 46, 77, 54, 92, 35, 32};
+	std::sort(std::begin(nums), std::end(nums));
+	end = std::chrono::high_resolution_clock::now();
+	std::cout << "Normal sorting:   ";
+	for (auto& i : nums)
+		std::cout << i << " ";
+	std::cout << std::endl;
+	std::cout << std::chrono::duration_cast<std::chrono::duration<float, std::chrono::milliseconds::period> >(end - begin).count() << "ms" << std::endl;
 }
